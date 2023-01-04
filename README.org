@@ -1,0 +1,63 @@
+* passage.el: age encryption support for the standard unix password manager
+
+#+html:<p align="center"><img src="img/passage.png"/></p>
+
+passage.el builds on top of [[https://github.com/anticomputer/age.el][age.el]] to provide Emacs support for [[https://github.com/FiloSottile/passage][passage]] which
+is an Age encryption based port of [[https://www.passwordstore.org/][pass]], the standard unix password manager.
+
+* Usage
+
+Put the ~passage.el~ project in your ~load-path~ and:
+
+#+begin_src emacs-lisp
+(require 'passage)
+#+end_src
+
+You can now interact with your [[https://github.com/FiloSottile/passage][passage]] based local encryption store. Please
+see the [[https://github.com/FiloSottile/passage/blob/main/README][passage README]] for instructions on how to migrate from the gpg based
+pass utility to the age based passage utility.
+
+passage.el assumes your passage store is located at =~/.passage/store= but you
+may customize this through the =auth-source-passage-filename= variable.
+
+* Tips and Tricks
+
+** Pass to passage migration
+
+#+begin_src bash
+#! /usr/bin/env bash
+set -eou pipefail
+cd "${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+while read -r -d "" passfile; do
+    name="${passfile#./}"; name="${name%.gpg}"
+    [[ -f "${PASSAGE_DIR:-$HOME/.passage/store}/$name.age" ]] && continue
+    pass "$name" | passage insert -m "$name" || { passage rm "$name"; break; }
+done < <(find . -path '*/.git' -prune -o -iname '*.gpg' -print0)
+#+end_src
+
+** Pinentry support
+
+For pinentry support I recommend you use [[https://github.com/str4d/rage/][rage]] as your age encryption utility.
+
+* Known Issues
+
+** OTP plugin support is untested
+
+I have not tested passage with the OTP plugins. Ostensibly the regular pass
+plugins should work relatively unchanged but this is conjecture at this point.
+
+* License
+
+GPLv3
+
+This code was ported from the original password-store Emacs support libraries
+and its authors are:
+
+- Damien Cassou <damien@cassou.me>
+- Nicolas Petton <nicolas@petton.fr>
+- Keith Amidon <camalot@picnicpark.org>
+- Daniel Barreto
+- Svend Sorensen <svend@svends.net>
+
+Their original copyright assignments apply as this code is mostly a search and
+replace port of their work.
