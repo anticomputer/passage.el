@@ -5,7 +5,7 @@
 ;; Created: Tue Aug 22 13:46:01 2017 (+0200)
 ;; Version: 0.1.0
 ;; Package-Version: 20190713.1348
-;; Package-Requires: ((emacs "25") (s "1.9.0") (passage-store "0.1"))
+;; Package-Requires: ((emacs "25") (s "1.9.0"))
 ;; URL: https://github.com/volrath/passage-store-otp.el
 ;; Keywords: tools, pass
 ;;

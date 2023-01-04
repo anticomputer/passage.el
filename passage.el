@@ -6,7 +6,7 @@
 ;;         Damien Cassou <damien@cassou.me>
 ;; Version: 2.0
 ;; GIT: https://github.com/NicolasPetton/pass
-;; Package-Requires: ((emacs "25") (passage-store "2.1.0") (passage-store-otp "0.1.5") (f "0.17"))
+;; Package-Requires: ((emacs "25") (f "0.17"))
 ;; Created: 09 Jun 2015
 ;; Keywords: passage-store, password, keychain
 
