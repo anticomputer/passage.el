@@ -39,6 +39,13 @@ done < <(find . -path '*/.git' -prune -o -iname '*.gpg' -print0)
 
 For pinentry support I recommend you use [[https://github.com/str4d/rage/][rage]] as your age encryption utility.
 
+** Other passage use cases
+
+The passage author has a nice walkthrough of their personal, non-emacs based,
+passage configuration and future plans for the project here:
+
+https://words.filippo.io/dispatches/passage/
+
 * Known Issues
 
 ** OTP plugin support is untested
