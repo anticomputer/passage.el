@@ -22,6 +22,16 @@ may customize this through the =auth-source-passage-filename= variable.
 
 * Tips and Tricks
 
+** Using passage store secrets in your elisp code
+
+passage.el includes an =auth-source= back-end for passage, which means you can
+programmatically fetch passwords out of your passage store with
+=auth-source-passage-get=, e.g.:
+
+#+begin_src emacs-lisp
+(auth-source-passage-get 'secret "store/secret")
+#+end_src
+
 ** Pass to passage migration
 
 #+begin_src bash
