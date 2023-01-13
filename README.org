@@ -49,6 +49,39 @@ done < <(find . -path '*/.git' -prune -o -iname '*.gpg' -print0)
 
 For pinentry support I recommend you use [[https://github.com/str4d/rage/][rage]] as your age encryption utility.
 
+** Specifying alternate passage identities and recipients across systems
+
+If your emacs configuration moves around a variety of systems that all share
+the same passage store, but you do not want to keep the same key material on
+all those systems, you can encrypt to a series of recipients via newline
+seperated public keys at =~/.passage/store/.age-recipients=
+
+If you'd like to specify a specific identity (private key) for passage.el to
+use on password show operations, you can use the normal environment variables
+recognized by passage for this in your configuration, e.g.:
+
+#+begin_src emacs-lisp
+(setenv "PASSAGE_IDENTITIES_FILE" (expand-file-name "~/path/to/identity"))
+#+end_src
+
+This is useful to deconflict e.g. =age-plugin-yubikey= managed identities
+contained in the default passage identity file at =~/.passage/identities= for
+which the yubikeys may not be plugged into the system you are currently
+working with.
+
+Note that for file open operations, you'll want to use [[https://github.com/anticomputer/age.el][age.el]] in conjuction
+with passage.el, which has its own identity and recipient configuration
+settings. For example, on one of my virtual machines, I use an alternate
+identity, who's recipient is included in the passage.el and age.el
+configurations on all my system, and specify to only use this identity for
+age.el and passage.el, respectively, on the virtual machin using the following
+configuration:
+
+#+begin_src emacs-lisp
+(setq age-default-identity (expand-file-name "~/.ssh/age_yubikey_vm"))
+(setenv "PASSAGE_IDENTITIES_FILE" age-default-identity)
+#+end_src
+
 ** Other passage use cases
 
 The passage author has a nice walkthrough of their personal, non-emacs based,
