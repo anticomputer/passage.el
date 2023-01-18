@@ -33,6 +33,7 @@
 ;; Url: https://github.com/anticomputer/passage.el
 
 ;;; Code:
+(require 'passage-store-otp)
 (require 'passage-store)
 (require 'imenu)
 (require 'button)
