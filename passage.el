@@ -6,7 +6,7 @@
 ;;         Damien Cassou <damien@cassou.me>
 ;; Version: 2.0
 ;; GIT: https://github.com/NicolasPetton/pass
-;; Package-Requires: ((emacs "25") (f "0.17"))
+;; Package-Requires: ((emacs "25") (f "0.17") (age "0.1.3"))
 ;; Created: 09 Jun 2015
 ;; Keywords: passage-store, password, keychain
 
@@ -39,6 +39,8 @@
 (require 'button)
 (require 'f)
 (require 'subr-x)
+
+(eval-when-compile (require 'age))
 
 (defgroup pass '()
   "Major mode for passage-store."
@@ -160,6 +162,20 @@ Similar to `save-excursion' but only restore the point."
        ,@body
        (goto-char (min ,point (point-max))))))
 
+(defun passage--find-file (filename)
+  "Open passage file with appropriate age.el context."
+  ;; make age.el respect passage env variables
+  ;; see: https://github.com/FiloSottile/passage
+  (cl-letf (((symbol-value 'age-default-identity)
+             (or (getenv "PASSAGE_IDENTITIES_FILE") age-default-identity))
+            ((symbol-value 'age-default-recipient)
+             (or (getenv "PASSAGE_RECIPIENTS_FILE")
+                 (let ((recipients (getenv "PASSAGE_RECIPIENTS")))
+                   (when (stringp recipients)
+                     (split-string recipients)))
+                 age-default-recipient)))
+    (find-file filename)))
+
 (defun passage-quit ()
   "Kill the buffer quitting the window."
   (interactive)
@@ -273,7 +289,7 @@ It creates an empty entry file, and visit it."
   (let ((entry (format "%s.age" (read-string "Password entry: ")))
         (default-directory (passage-store-dir)))
     (make-directory (file-name-directory entry) t)
-    (find-file (expand-file-name entry (passage-store-dir)))))
+    (passage--find-file (expand-file-name entry (passage-store-dir)))))
 
 (defun passage-insert-generated ()
   "Insert an entry to the passage-store.
@@ -287,7 +303,7 @@ user input."
   "Visit the entry at point."
   (interactive)
   (passage--with-closest-entry entry
-    (find-file (concat (f-join (passage-store-dir) entry) ".age"))))
+    (passage--find-file (concat (f-join (passage-store-dir) entry) ".age"))))
 
 (defun passage-copy ()
   "Add the password of entry at point to kill ring."
