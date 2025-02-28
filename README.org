@@ -85,11 +85,15 @@ configuration:
 As of https://github.com/anticomputer/passage.el/pull/4 passage.el will
 automagically set ~age-default-identity~ and ~age-default-recipient~ from
 ~PASSAGE_IDENTITIES_FILE~, ~PASSAGE_RECIPIENTS_FILE~ or ~PASSAGE_RECIPIENTS~
-enviromment variables for passage.el based `find-file` operations, i.e. if
+environment variables for passage.el based `find-file` operations. When
 you open a file from the passage store any existing passage environment
 configuration will supercede your Emacs-wide age.el configuration. This
 simplifies your use of passage.el without needing to manually deconflict
-or align age.el configurations with passage.el and passage configurations.
+or align age.el configurations with your passage configuration.
+
+It is important to understand that passage is its own tool with its own
+configuration. It only, and ONLY, depends on age.el for operating on its
+associated Age files inside Emacs buffers.
 
 This behavior is backwards compatible with prior passage.el configurations
 and was added for users who might have entirely different Age identities
@@ -97,10 +101,6 @@ and recipients for their Emacs-wide Age files vs their passage store Age
 files. If these environment variables are not set, passage.el will fall back
 to using the global age.el identity and recipient configuration for its
 file open and save operations.
-
-It is important to understand that passage is its own tool with its own
-configuration. It only, and ONLY, depends on age.el for operating on its
-associated Age files inside Emacs buffers.
 
 For details on proper passage configuration please see its documentation at:
 https://github.com/FiloSottile/passage
