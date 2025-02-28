@@ -74,13 +74,40 @@ with passage.el, which has its own identity and recipient configuration
 settings. For example, on one of my virtual machines, I use an alternate
 identity, who's recipient is included in the passage.el and age.el
 configurations on all my system, and specify to only use this identity for
-age.el and passage.el, respectively, on the virtual machin using the following
+age.el and passage.el, respectively, on the virtual machine using the following
 configuration:
 
 #+begin_src emacs-lisp
 (setq age-default-identity (expand-file-name "~/.ssh/age_yubikey_vm"))
 (setenv "PASSAGE_IDENTITIES_FILE" age-default-identity)
 #+end_src
+
+As of https://github.com/anticomputer/passage.el/pull/4 passage.el will
+automagically set ~age-default-identity~ and ~age-default-recipient~ from
+~PASSAGE_IDENTITIES_FILE~, ~PASSAGE_RECIPIENTS_FILE~ or ~PASSAGE_RECIPIENTS~
+enviromment variables for passage.el based `find-file` operations, i.e. if
+you open a file from the passage store any existing passage environment
+configuration will supercede your Emacs-wide age.el configuration. This
+simplifies your use of passage.el without needing to manually deconflict
+or align age.el configurations with passage.el and passage configurations.
+
+This behavior is backwards compatible with prior passage.el configurations
+and was added for users who might have entirely different Age identities
+and recipients for their Emacs-wide Age files vs their passage store Age
+files. If these environment variables are not set, passage.el will fall back
+to using the global age.el identity and recipient configuration for its
+file open and save operations.
+
+It is important to understand that passage is its own tool with its own
+configuration. It only, and ONLY, depends on age.el for operating on its
+associated Age files inside Emacs buffers.
+
+For details on proper passage configuration please see its documentation at:
+https://github.com/FiloSottile/passage
+
+TL;DR: if passage works for you on the normal cli, it should now also work
+inside passage.el without having to worry about your age.el configuration,
+by default.
 
 ** Other passage use cases
 
