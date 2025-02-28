@@ -6,7 +6,7 @@
 ;;         Damien Cassou <damien@cassou.me>
 ;; Version: 2.0
 ;; GIT: https://github.com/NicolasPetton/pass
-;; Package-Requires: ((emacs "25") (f "0.17"))
+;; Package-Requires: ((emacs "25") (f "0.17") (age "0.1.3"))
 ;; Created: 09 Jun 2015
 ;; Keywords: passage-store, password, keychain
 
@@ -39,6 +39,8 @@
 (require 'button)
 (require 'f)
 (require 'subr-x)
+
+(eval-when-compile (require 'age))
 
 (defgroup pass '()
   "Major mode for passage-store."
